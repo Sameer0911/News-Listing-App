@@ -158,7 +158,8 @@ public class QueryUtils {
         try {
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(bookJSON);
-            JSONArray jsonArray = baseJsonResponse.getJSONArray("results");
+            JSONObject testJSON = baseJsonResponse.getJSONObject("response");
+            JSONArray jsonArray = testJSON.getJSONArray("results");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject currentNews = jsonArray.getJSONObject(i);
                 String typeObject = currentNews.optString("article");

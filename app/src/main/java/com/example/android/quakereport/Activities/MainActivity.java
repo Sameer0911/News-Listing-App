@@ -17,15 +17,19 @@ package com.example.android.quakereport.Activities;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,6 +38,7 @@ import com.example.android.quakereport.Models.News;
 import com.example.android.quakereport.Models.NewsLoader;
 import com.example.android.quakereport.R;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * TextView that is displayed when the list is empty
      */
     private TextView mEmptyStateTextView;
+
+    private ListView listView;
 
     /**
      * URL for books data from Google Books API
@@ -90,6 +97,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         final ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        listView = (ListView) findViewById(R.id.listView);
+
+        if (listView != null) {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    News news = mAdapter.getItem(i);
+
+                    Uri uriURL = Uri.parse(news.getWebURL());
+
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, uriURL);
+                    startActivity(webIntent);
+                }
+            });
+        }
         checkConnection(connMgr);
     }
 

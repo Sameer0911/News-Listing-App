@@ -33,12 +33,17 @@ public class Adapters {
                         R.layout.moj_layout, parent, false);
             }
             News currentItem = getItem(position);
-            String authorName = currentItem.getType();
+
+            String type = currentItem.getType();
             String title = currentItem.getWebTitle();
+            String selectionName = currentItem.getSectionName();
+
             TextView contactView1 = (TextView) listItemView.findViewById(R.id.type);
-            contactView1.setText(authorName);
+            contactView1.setText(type);
+
             TextView contactView2 = (TextView) listItemView.findViewById(R.id.sectionName);
-            contactView2.setText(title);
+            contactView2.setText(selectionName);
+
             TextView contactView3 = (TextView) listItemView.findViewById(R.id.webTitle);
             contactView3.setText(title);
 
