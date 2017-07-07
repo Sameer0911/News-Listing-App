@@ -62,11 +62,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private ListView listView;
 
+    private boolean isConnected;
+
     /**
      * URL for books data from Google Books API
      */
     private static final String GOOGLE_BOOK_API_URL =
-            "http://content.guardianapis.com/search?q=football&api-key=31e35169-5544-4f6a-9402-66e2826b0726";
+            "https://content.guardianapis.com/search?q=music&order-date=published&show-section=true&show-fields=headline,thumbnail&show-references=author&show-tags=contributor&page=10&page-size=20&api-key=test";
 
     /**
      * Constant value for the book loader ID. We can choose any integer.
@@ -97,7 +99,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         final ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        listView = (ListView) findViewById(R.id.listView);
+        checkConnection(connMgr);
+
+        listView = (ListView) findViewById(R.id.list);
 
         if (listView != null) {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -113,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
             });
         }
-        checkConnection(connMgr);
     }
 
     public void checkConnection(ConnectivityManager connectivityManager) {
@@ -129,8 +132,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
             loaderManager.initLoader(BOOK_LOADER_ID, null, this);
+            isConnected = true;
         } else {
+            isConnected = false;
             // Update empty state with no connection error message
+            mEmptyStateTextView.setVisibility(View.VISIBLE);
             mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
     }

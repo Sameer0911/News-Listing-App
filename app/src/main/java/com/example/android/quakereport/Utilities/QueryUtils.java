@@ -17,7 +17,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -162,21 +165,59 @@ public class QueryUtils {
             JSONArray jsonArray = testJSON.getJSONArray("results");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject currentNews = jsonArray.getJSONObject(i);
-                String typeObject = currentNews.optString("article");
-                String sectionNameObject = currentNews.optString("sectionName");
-                String webTitleObject = currentNews.optString("webTitle");
-                String webURLObject = currentNews.optString("webURL");
 
+                String dateField;
+                if (currentNews.has("webPublicationDate")) {
+                    dateField = currentNews.getString("webPublicationDate");
+                } else {
+                    // assign info about missing info about author
+                    dateField = "Unknown date";
+                }
 
-                News news = new News(typeObject, webTitleObject, sectionNameObject, webURLObject);
+                // Switch format date
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateField);
+                String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                dateField = formattedDate;
+                Log.println(Log.INFO, LOG_TAG, String.valueOf("PUBLISHED Date: " + dateField));
+
+                String webTitleObject;
+                if (currentNews.has("webTitle")) {
+                    webTitleObject = currentNews.getString("webTitle");
+                } else {
+                    webTitleObject = "Unknown Web Title";
+                }
+
+                String sectionNameObject;
+                if (currentNews.has("sectionName")) {
+                    sectionNameObject = currentNews.getString("sectionName");
+                } else {
+                    sectionNameObject = "Unknown category";
+                }
+
+                String webURLObject;
+                if (currentNews.has("webUrl")) {
+                    webURLObject = currentNews.getString("webUrl");
+                } else {
+                    webURLObject = null;
+                }
+
+                String imageArticle;
+                JSONObject fields = currentNews.getJSONObject("fields");
+                if (fields.has("thumbnail")) {
+                    imageArticle = fields.getString("thumbnail");
+                    Log.println(Log.INFO, LOG_TAG, String.valueOf("IMAGE URL: " + imageArticle));
+                } else {
+                    continue; // back to begin of this loop without adding an object without thumbnail img to List
+                }
+
+                News news = new News(dateField, webTitleObject, sectionNameObject, webURLObject, imageArticle);
                 newses.add(news);
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            // If an error is thrown when executing any of the above statements in the "try" block,
-            // catch the exception here, so the app doesn't crash. Print a log message
-            // with the message from the exception.
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         // Return the list of newses
         return newses;

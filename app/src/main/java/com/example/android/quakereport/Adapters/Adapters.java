@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.quakereport.Models.News;
 import com.example.android.quakereport.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -34,18 +36,22 @@ public class Adapters {
             }
             News currentItem = getItem(position);
 
-            String type = currentItem.getType();
+            String type = currentItem.getDate();
             String title = currentItem.getWebTitle();
-            String selectionName = currentItem.getSectionName();
+            String selectionName = currentItem.getCategory();
 
-            TextView contactView1 = (TextView) listItemView.findViewById(R.id.type);
+
+            TextView contactView1 = (TextView) listItemView.findViewById(R.id.date);
             contactView1.setText(type);
 
-            TextView contactView2 = (TextView) listItemView.findViewById(R.id.sectionName);
-            contactView2.setText(selectionName);
+            TextView contactView2 = (TextView) listItemView.findViewById(R.id.category);
+            contactView2.setText("Category: " + selectionName);
 
             TextView contactView3 = (TextView) listItemView.findViewById(R.id.webTitle);
             contactView3.setText(title);
+
+            ImageView imageView = (ImageView) listItemView.findViewById(R.id.thumbnail_image);
+            Picasso.with(getContext()).load(currentItem.getmThumbUrl()).into(imageView);
 
             return listItemView;
         }
