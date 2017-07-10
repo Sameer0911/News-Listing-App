@@ -1,9 +1,9 @@
-package com.example.android.quakereport.Utilities;
+package com.example.android.newsapp.Utilities;
 
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.android.quakereport.Models.News;
+import com.example.android.newsapp.Models.News;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +24,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Helper methods related to requesting and receiving earthquake data from USGS.
+ * Helper methods related to requesting and receiving news data from USGS.
  */
 public class QueryUtils {
 
-    /**
-     * Sample JSON response for a USGS query
-     */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
     /**
@@ -45,7 +42,7 @@ public class QueryUtils {
      * Return a list of {@link News} objects that has been built up from
      * parsing the given JSON response.
      */
-    public static List<News> fetchBookData(String requestUrl) {
+    public static List<News> fetchNewsData(String requestUrl) {
 
         final int SLEEPING_TIME = 2000;
 
@@ -67,10 +64,10 @@ public class QueryUtils {
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link News}s
-        List<News> newses = extractFeatureFromJson(jsonResponse);
+        List<News> news = extractFeatureFromJson(jsonResponse);
 
         // Return the list of {@link News}s
-        return newses;
+        return news;
     }
 
     private static URL createUrl(String stringUrl) {
@@ -86,6 +83,9 @@ public class QueryUtils {
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
+        final int READ_TIME = 10000; /* milliseconds */
+        final int CONNECT_TIME = 15000; /* milliseconds */
+
         // If the URL is null, then return early.
         if (url == null) {
             return jsonResponse;
@@ -95,8 +95,8 @@ public class QueryUtils {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.setReadTimeout(READ_TIME);
+            urlConnection.setConnectTimeout(CONNECT_TIME);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -109,7 +109,7 @@ public class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the book JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the news JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -146,9 +146,9 @@ public class QueryUtils {
      * Return a list of {@link News} objects that has been built up from
      * parsing the given JSON response.
      */
-    private static List<News> extractFeatureFromJson(String bookJSON) {
+    private static List<News> extractFeatureFromJson(String newsJSON) {
         // If the JSON string is empty or null, then return early.
-        if (TextUtils.isEmpty(bookJSON)) {
+        if (TextUtils.isEmpty(newsJSON)) {
             return null;
         }
         // Create an empty ArrayList that we can start adding newses to
@@ -160,7 +160,7 @@ public class QueryUtils {
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
         try {
             // Create a JSONObject from the JSON response string
-            JSONObject baseJsonResponse = new JSONObject(bookJSON);
+            JSONObject baseJsonResponse = new JSONObject(newsJSON);
             JSONObject testJSON = baseJsonResponse.getJSONObject("response");
             JSONArray jsonArray = testJSON.getJSONArray("results");
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -215,7 +215,7 @@ public class QueryUtils {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the news JSON results", e);
         } catch (ParseException e) {
             e.printStackTrace();
         }

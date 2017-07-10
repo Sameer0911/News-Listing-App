@@ -1,4 +1,4 @@
-package com.example.android.quakereport.Adapters;
+package com.example.android.newsapp.Adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -8,17 +8,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.quakereport.Models.News;
-import com.example.android.quakereport.R;
+import com.example.android.newsapp.Models.News;
+import com.example.android.newsapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class Adapters {
-    public static class BookAdapter extends ArrayAdapter<News> {
+    public static class NewsAdapter extends ArrayAdapter<News> {
 
 
-        public BookAdapter(Activity context, ArrayList<News> designClassAdapters) {
+        public NewsAdapter(Activity context, ArrayList<News> designClassAdapters) {
             // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
             // the second argument is used when the ArrayAdapter is populating a single TextView.
             // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
@@ -47,7 +47,7 @@ public class Adapters {
             TextView contactView2 = (TextView) listItemView.findViewById(R.id.category);
             contactView2.setText("Category: " + selectionName);
 
-            TextView contactView3 = (TextView) listItemView.findViewById(R.id.webTitle);
+            TextView contactView3 = (TextView) listItemView.findViewById(R.id.web_title);
             contactView3.setText(title);
 
             ImageView imageView = (ImageView) listItemView.findViewById(R.id.thumbnail_image);

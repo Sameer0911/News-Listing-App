@@ -1,25 +1,29 @@
-package com.example.android.quakereport.Models;
+package com.example.android.newsapp.Models;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 
-import com.example.android.quakereport.Utilities.QueryUtils;
+import com.example.android.newsapp.Utilities.QueryUtils;
 
 import java.util.List;
 
 public class NewsLoader extends AsyncTaskLoader<List<News>> {
 
-    /** Tag for log messages */
+    /**
+     * Tag for log messages
+     */
     private static final String LOG_TAG = NewsLoader.class.getName();
 
-    /** Query URL */
+    /**
+     * Query URL
+     */
     private String mUrl;
 
     /**
      * Constructs a new {@link NewsLoader}.
      *
      * @param context of the activity
-     * @param url to load data from
+     * @param url     to load data from
      */
     public NewsLoader(Context context, String url) {
         super(context);
@@ -40,8 +44,8 @@ public class NewsLoader extends AsyncTaskLoader<List<News>> {
             return null;
         }
 
-        // Perform the network request, parse the response, and extract a list of newses.
-        List<News> newses = QueryUtils.fetchBookData(mUrl);
-        return newses;
+        // Perform the network request, parse the response, and extract a list of news.
+        List<News> news = QueryUtils.fetchNewsData(mUrl);
+        return news;
     }
 }

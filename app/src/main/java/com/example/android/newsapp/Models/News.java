@@ -1,4 +1,4 @@
-package com.example.android.quakereport.Models;
+package com.example.android.newsapp.Models;
 
 public class News {
 
