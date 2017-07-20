@@ -1,7 +1,7 @@
 Book List App
 ===================================
 
-This app displays a list of newses from Google API.
+This app displays a list of news from Google API.
 
 Used in a Udacity course in the Beginning Android Nanodegree.
 Parsing side:  https://www.googleapis.com/newses/v1/volumes?q=
